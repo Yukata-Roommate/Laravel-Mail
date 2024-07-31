@@ -12,8 +12,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailables\Headers;
 
 /**
- * Laravelのメール送信機能を包括したクラス
- * BaseMailClientで使用する
+ * Laravel Mail
  * 
  * @package YukataRm\Laravel\Mail
  */
@@ -22,24 +21,57 @@ class LaravelMail extends Mailable
     use Queueable, SerializesModels;
 
     /**
-     * コンストラクタ
+     * Envelope instance
+     * 
+     * @var \Illuminate\Mail\Mailables\Envelope
+     */
+    protected Envelope $envelope;
+
+    /**
+     * Content instance
+     * 
+     * @var \Illuminate\Mail\Mailables\Content
+     */
+    protected Content $content;
+
+    /**
+     * Attachment instance array
+     * 
+     * @var array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
+    protected array $attachments;
+
+    /**
+     * Headers instance
+     * 
+     * @var \Illuminate\Mail\Mailables\Headers
+     */
+    protected Headers $headers;
+
+    /**
+     * constructor
      * 
      * @param \Illuminate\Mail\Mailables\Envelope $envelope
      * @param \Illuminate\Mail\Mailables\Content $content
      * @param array<int, \Illuminate\Mail\Mailables\Attachment> $attachments
      * @param \Illuminate\Mail\Mailables\Headers $headers
      */
-    public function __construct(
-        protected Envelope $envelope,
-        protected Content $content,
-        protected array $attachments,
-        protected Headers $headers
+    function __construct(
+        Envelope $envelope,
+        Content $content,
+        array $attachments,
+        Headers $headers
     ) {
+        $this->envelope    = $envelope;
+        $this->content     = $content;
+        $this->attachments = $attachments;
+        $this->headers     = $headers;
     }
 
-
     /**
-     * Get the message envelope.
+     * get Envelope instance
+     * 
+     * @return \Illuminate\Mail\Mailables\Envelope
      */
     public function envelope(): Envelope
     {
@@ -47,7 +79,9 @@ class LaravelMail extends Mailable
     }
 
     /**
-     * Get the message content definition.
+     * get Content instance
+     * 
+     * @return \Illuminate\Mail\Mailables\Content
      */
     public function content(): Content
     {
@@ -55,7 +89,7 @@ class LaravelMail extends Mailable
     }
 
     /**
-     * Get the attachments for the message.
+     * get Attachment instance array
      *
      * @return array<int, \Illuminate\Mail\Mailables\Attachment>
      */
@@ -65,7 +99,9 @@ class LaravelMail extends Mailable
     }
 
     /**
-     * Get the message headers.
+     * get Headers instance
+     * 
+     * @return \Illuminate\Mail\Mailables\Headers
      */
     public function headers(): Headers
     {

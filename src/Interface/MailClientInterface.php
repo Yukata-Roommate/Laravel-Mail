@@ -2,10 +2,15 @@
 
 namespace YukataRm\Laravel\Mail\Interface;
 
+use YukataRm\Laravel\Mail\LaravelMail;
+
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Attachment;
+use Illuminate\Mail\Mailables\Headers;
 
 /**
- * MailClientのInterface
+ * MailClient Interface
  * 
  * @package YukataRm\Laravel\Mail\Interface
  */
@@ -16,116 +21,71 @@ interface MailClientInterface
      *----------------------------------------*/
 
     /**
-     * メールを送信する
+     * send mail
      * 
      * @return void
      */
     public function send(): void;
 
     /**
-     * メールに使用される評価済みのHTMLを取得する
+     * get rendered mail
      * 
      * @return string
      */
     public function render(): string;
 
-    /**
-     * 使用するMailerのドライバー名を取得する
-     * 
-     * @return ?string
-     */
-    public function driver(): ?string;
-
-    /**
-     * 使用するMailerのドライバー名を設定する
-     * 
-     * @param string $driver
-     * @return static
-     */
-    public function setDriver(string $driver): static;
-
-    /**
-     * メールに使用する言語を取得する
-     * 
-     * @return ?string
-     */
-    public function locale(): ?string;
-
-    /**
-     * メールに使用する言語を設定する
-     * 
-     * @param string $locale
-     * @return static
-     */
-    public function setLocale(string $locale): static;
-
-    /**
-     * メール送信処理をQueueに登録する
-     * $delayがnullでない場合は、メール送信処理を指定した時間後に実行する
-     * 
-     * @param \DateTimeInterface|\DateInterval|int|null $delay
-     * @return void
-     */
-    public function queue(\DateTimeInterface|\DateInterval|int|null $delay = null): void;
-
-    /**
-     * メールをQueueに登録する処理をTransactionのCommit後に実行するかどうかを取得する
-     * 
-     * @return bool
-     */
-    public function afterCommit(): bool;
-
-    /**
-     * メールをQueueに登録する処理をTransactionのCommit後に実行する
-     * 
-     * @param bool $queueAfterCommit
-     * @return static
-     */
-    public function setAfterCommit(bool $queueAfterCommit = true): static;
-
-    /**
-     * メールをQueueに登録する際のConnection名を取得する
-     * 
-     * @return ?string
-     */
-    public function queueConnection(): ?string;
-
-    /**
-     * メールをQueueに登録する際のConnection名を設定する
-     * 
-     * @param string $queueConnection
-     * @return static
-     */
-    public function onConnection(string $queueConnection): static;
-
-    /**
-     * メールをQueueに登録する際のQueue名を取得する
-     * 
-     * @return ?string
-     */
-    public function queueName(): ?string;
-
-    /**
-     * メールをQueueに登録する際のQueue名を設定する
-     * 
-     * @param string $queueName
-     * @return static
-     */
-    public function onQueue(string $queueName): static;
-
     /*----------------------------------------*
-     * Envelope
+     * Laravel Mail
      *----------------------------------------*/
 
     /**
-     * 送信元メールアドレスを取得する
+     * get LaravelMail instance
      * 
-     * @return ?string
+     * @return \YukataRm\Laravel\Mail\LaravelMail
      */
-    public function senderAddress(): ?string;
+    public function laravelMail(): LaravelMail;
 
     /**
-     * 送信元メールアドレスを設定する
+     * get Envelope instance
+     * 
+     * @return \Illuminate\Mail\Mailables\Envelope
+     */
+    public function envelope(): Envelope;
+
+    /**
+     * get Content instance
+     * 
+     * @return \Illuminate\Mail\Mailables\Content
+     */
+    public function content(): Content;
+
+    /**
+     * get Attachment instance array
+     * 
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
+    public function attachments(): array;
+
+    /**
+     * get Headers instance
+     * 
+     * @return \Illuminate\Mail\Mailables\Headers
+     */
+    public function headers(): Headers;
+
+    /*----------------------------------------*
+     * Laravel Mail - Envelope
+     *----------------------------------------*/
+
+    /**
+     * get sender address
+     * 
+     * @return string|null
+     */
+    public function senderAddress(): string|null;
+
+    /**
+     * set sender address
      * 
      * @param string $senderAddress
      * @return static
@@ -133,14 +93,14 @@ interface MailClientInterface
     public function setSenderAddress(string $senderAddress): static;
 
     /**
-     * 送信元名を取得する
+     * get sender name
      * 
-     * @return ?string
+     * @return string|null
      */
-    public function senderName(): ?string;
+    public function senderName(): string|null;
 
     /**
-     * 送信元名を設定する
+     * set sender name
      * 
      * @param string $senderName
      * @return static
@@ -148,14 +108,14 @@ interface MailClientInterface
     public function setSenderName(string $senderName): static;
 
     /**
-     * 送信先メールアドレスを取得する
+     * get recipient address
      * 
-     * @return ?string
+     * @return string|null
      */
-    public function recipientAddress(): ?string;
+    public function recipientAddress(): string|null;
 
     /**
-     * 送信先メールアドレスを設定する
+     * set recipient address
      * 
      * @param string $recipientAddress
      * @return static
@@ -163,14 +123,14 @@ interface MailClientInterface
     public function setRecipientAddress(string $recipientAddress): static;
 
     /**
-     * 送信先名を取得する
+     * get recipient name
      * 
-     * @return ?string
+     * @return string|null
      */
-    public function recipientName(): ?string;
+    public function recipientName(): string|null;
 
     /**
-     * 送信先名を設定する
+     * set recipient name
      * 
      * @param string $recipientName
      * @return static
@@ -178,14 +138,14 @@ interface MailClientInterface
     public function setRecipientName(string $recipientName): static;
 
     /**
-     * 件名を取得する
+     * get mail subject
      * 
-     * @return ?string
+     * @return string|null
      */
-    public function subject(): ?string;
+    public function subject(): string|null;
 
     /**
-     * 件名を設定する
+     * set mail subject
      * 
      * @param string $subject
      * @return static
@@ -193,14 +153,14 @@ interface MailClientInterface
     public function setSubject(string $subject): static;
 
     /**
-     * CCのAddressインスタンスが格納された配列を取得する
+     * get CC address array
      * 
      * @return array<int, \Illuminate\Mail\Mailables\Address>
      */
     public function cc(): array;
 
     /**
-     * CCのメールアドレスと名前の配列を設定する
+     * set CC address array
      * 
      * @param array<int, \Illuminate\Mail\Mailables\Address> $cc
      * @return static
@@ -208,23 +168,23 @@ interface MailClientInterface
     public function setCc(array $cc): static;
 
     /**
-     * CCのメールアドレスと名前を追加する
+     * add CC address
      * 
-     * @param string $ccAddress
-     * @param ?string $ccName
+     * @param string $address
+     * @param string|null $name
      * @return static
      */
-    public function addCc(string $ccAddress, ?string $ccName = null): static;
+    public function addCc(string $address, string|null $name = null): static;
 
     /**
-     * BCCのメールアドレスと名前の配列を取得する
+     * get BCC address array
      * 
      * @return array<int, \Illuminate\Mail\Mailables\Address>
      */
     public function bcc(): array;
 
     /**
-     * BCCのメールアドレスと名前の配列を設定する
+     * set BCC address array
      * 
      * @param array<int, \Illuminate\Mail\Mailables\Address> $bcc
      * @return static
@@ -232,23 +192,23 @@ interface MailClientInterface
     public function setBcc(array $bcc): static;
 
     /**
-     * BCCのメールアドレスと名前を追加する
+     * add BCC address
      * 
-     * @param string $bccAddress
-     * @param ?string $bccName
+     * @param string $address
+     * @param string|null $name
      * @return static
      */
-    public function addBcc(string $bccAddress, ?string $bccName = null): static;
+    public function addBcc(string $address, string|null $name = null): static;
 
     /**
-     * ReplyToのメールアドレスと名前の配列を取得する
+     * get ReplyTo address array
      * 
      * @return array<int, \Illuminate\Mail\Mailables\Address>
      */
     public function replyTo(): array;
 
     /**
-     * ReplyToのメールアドレスと名前の配列を設定する
+     * set ReplyTo address array
      * 
      * @param array<int, \Illuminate\Mail\Mailables\Address> $replyTo
      * @return static
@@ -256,23 +216,23 @@ interface MailClientInterface
     public function setReplyTo(array $replyTo): static;
 
     /**
-     * ReplyToのメールアドレスと名前を追加する
+     * add ReplyTo address
      * 
-     * @param string $replyToAddress
-     * @param ?string $replyToName
+     * @param string $address
+     * @param string|null $name
      * @return static
      */
-    public function addReplyTo(string $replyToAddress, ?string $replyToName = null): static;
+    public function addReplyTo(string $address, string|null $name = null): static;
 
     /**
-     * タグの配列を取得する
+     * get tag array
      * 
      * @return array<int, string>
      */
     public function tags(): array;
 
     /**
-     * タグの配列を設定する
+     * set tag array
      * 
      * @param array<int, string> $tags
      * @return static
@@ -280,7 +240,7 @@ interface MailClientInterface
     public function setTags(array $tags): static;
 
     /**
-     * タグを追加する
+     * add tag
      * 
      * @param string $tag
      * @return static
@@ -288,14 +248,14 @@ interface MailClientInterface
     public function addTags(string $tag): static;
 
     /**
-     * メタデータの配列を取得する
+     * get metadata array
      * 
      * @return array<string, string|int>
      */
     public function metadata(): array;
 
     /**
-     * メタデータの配列を設定する
+     * set metadata array
      * 
      * @param array<string, string|int> $metadata
      * @return static
@@ -303,7 +263,7 @@ interface MailClientInterface
     public function setMetadata(array $metadata): static;
 
     /**
-     * メタデータを追加する
+     * add metadata
      * 
      * @param string $key
      * @param string|int $value
@@ -312,18 +272,18 @@ interface MailClientInterface
     public function addMetadata(string $key, string|int $value): static;
 
     /*----------------------------------------*
-     * Content
+     * Laravel Mail - Content
      *----------------------------------------*/
 
     /**
-     * 使用するviewのbladeファイル名を取得する
+     * get view blade file name
      * 
-     * @return ?string
+     * @return string|null
      */
-    public function view(): ?string;
+    public function view(): string|null;
 
     /**
-     * 使用するviewのbladeファイル名を設定する
+     * set view blade file name
      * 
      * @param string $view
      * @return static
@@ -331,14 +291,14 @@ interface MailClientInterface
     public function setView(string $view): static;
 
     /**
-     * 使用するviewのbladeファイル名を取得する
+     * get html blade file name
      * 
-     * @return ?string
+     * @return string|null
      */
-    public function html(): ?string;
+    public function html(): string|null;
 
     /**
-     * 使用するviewのbladeファイル名を設定する
+     * set html blade file name
      * 
      * @param string $view
      * @return static
@@ -346,14 +306,14 @@ interface MailClientInterface
     public function setHtml(string $html): static;
 
     /**
-     * 使用するテキストを取得する
+     * get text
      * 
-     * @return ?string
+     * @return string|null
      */
-    public function text(): ?string;
+    public function text(): string|null;
 
     /**
-     * 使用するテキストを設定する
+     * set text
      * 
      * @param string $text
      * @return static
@@ -361,14 +321,14 @@ interface MailClientInterface
     public function setText(string $text): static;
 
     /**
-     * 使用するMarkdownを取得する
+     * get markdown text
      * 
-     * @return ?string
+     * @return string|null
      */
-    public function markdown(): ?string;
+    public function markdown(): string|null;
 
     /**
-     * 使用するMarkdownを設定する
+     * set markdown text
      * 
      * @param string $markdown
      * @return static
@@ -376,14 +336,14 @@ interface MailClientInterface
     public function setMarkdown(string $markdown): static;
 
     /**
-     * 使用するHTMLを取得する
+     * get html string
      * 
-     * @return ?string
+     * @return string|null
      */
-    public function htmlString(): ?string;
+    public function htmlString(): string|null;
 
     /**
-     * 使用するHTMLを設定する
+     * set html string
      * 
      * @param string $htmlString
      * @return static
@@ -391,14 +351,14 @@ interface MailClientInterface
     public function setHtmlString(string $htmlString): static;
 
     /**
-     * viewで使用するデータを取得する
+     * get data for view
      * 
      * @return array<string, mixed>
      */
     public function with(): array;
 
     /**
-     * viewで使用するデータを設定する
+     * set data for view
      * 
      * @param array<string, mixed> $with
      * @return static
@@ -406,18 +366,11 @@ interface MailClientInterface
     public function setWith(array $with): static;
 
     /*----------------------------------------*
-     * Attachments
+     * Laravel Mail - Attachments
      *----------------------------------------*/
 
     /**
-     * 添付ファイルを取得する
-     * 
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array;
-
-    /**
-     * 添付ファイルを設定する
+     * set Attachment instance array
      * 
      * @param array<int, \Illuminate\Mail\Mailables\Attachment>
      * @return static
@@ -425,7 +378,7 @@ interface MailClientInterface
     public function setAttachments(array $attachments): static;
 
     /**
-     * 添付ファイルを追加する
+     * add Attachment instance
      * 
      * @param \Illuminate\Mail\Mailables\Attachment $attachment
      * @return static
@@ -433,27 +386,28 @@ interface MailClientInterface
     public function addAttachments(Attachment $attachment): static;
 
     /**
-     * ファイルパスを使用して添付ファイルを追加する
+     * add Attachment instance array from file path
      * 
      * @param string $path
      * @param string|null $name
      * @param string|null $mime
      * @return static
      */
-    public function addAttachmentsFromPath(string $path, ?string $name = null, ?string $mime = null): static;
+    public function addAttachmentsFromPath(string $path, string|null $name = null, string|null $mime = null): static;
+
 
     /**
-     * ファイルパスを使用してStorage配下の添付ファイルを追加する
+     * add Attachment instance array from storage path
      * 
      * @param string $path
      * @param string|null $name
      * @param string|null $mime
      * @return static
      */
-    public function addAttachmentsFromStorage(string $path, ?string $name = null, ?string $mime = null): static;
+    public function addAttachmentsFromStorage(string $path, string|null $name = null, string|null $mime = null): static;
 
     /**
-     * ファイルパスとディスク名を使用してStorage配下の添付ファイルを追加する
+     * add Attachment instance array from storage disk
      * 
      * @param string $path
      * @param string $disk
@@ -461,31 +415,31 @@ interface MailClientInterface
      * @param string|null $mime
      * @return static
      */
-    public function addAttachmentsFromStorageDisk(string $path, string $disk, ?string $name = null, ?string $mime = null): static;
+    public function addAttachmentsFromStorageDisk(string $path, string $disk, string|null $name = null, string|null $mime = null): static;
 
     /**
-     * ファイルパスを使用して添付ファイルを追加する
+     * add Attachment instance array from data
      * 
      * @param \Closure $data
      * @param string|null $name
      * @param string|null $mime
      * @return static
      */
-    public function addAttachmentsFromData(\Closure $data, ?string $name = null, ?string $mime = null): static;
+    public function addAttachmentsFromData(\Closure $data, string|null $name = null, string|null $mime = null): static;
 
     /*----------------------------------------*
-     * Headers
+     * Laravel Mail - Headers
      *----------------------------------------*/
 
     /**
-     * メッセージIDを取得する
+     * get message id
      * 
-     * @return ?string
+     * @return string|null
      */
-    public function messageId(): ?string;
+    public function messageId(): string|null;
 
     /**
-     * メッセージIDを設定する
+     * set message id
      * 
      * @param string $messageId
      * @return static
@@ -493,14 +447,14 @@ interface MailClientInterface
     public function setMessageId(string $messageId): static;
 
     /**
-     * リファレンスの配列を取得する
+     * get reference array
      * 
      * @return array<int, string>
      */
     public function references(): array;
 
     /**
-     * リファレンスの配列を設定する
+     * set reference array
      * 
      * @param array<int, string> $references
      * @return static
@@ -508,7 +462,7 @@ interface MailClientInterface
     public function setReferences(array $references): static;
 
     /**
-     * リファレンスを追加する
+     * add reference
      * 
      * @param string $reference
      * @return static
@@ -516,14 +470,14 @@ interface MailClientInterface
     public function addReferences(string $reference): static;
 
     /**
-     * テキストヘッダーの配列を取得する
+     * get text header array
      * 
      * @return array<string, string>
      */
     public function textHeaders(): array;
 
     /**
-     * テキストヘッダーの配列を設定する
+     * set text header array
      * 
      * @param array<string, string> $textHeaders
      * @return static
@@ -531,11 +485,103 @@ interface MailClientInterface
     public function setTextHeaders(array $textHeaders): static;
 
     /**
-     * テキストヘッダーを追加する
+     * add text header
      * 
      * @param string $key
      * @param string $value
      * @return static
      */
     public function addTextHeaders(string $key, string $value): static;
+
+    /*----------------------------------------*
+     * Pending Mail
+     *----------------------------------------*/
+
+    /**
+     * get mail driver
+     * 
+     * @return string|null
+     */
+    public function driver(): string|null;
+
+    /**
+     * set mail driver
+     * 
+     * @param string $driver
+     * @return static
+     */
+    public function setDriver(string $driver): static;
+
+    /**
+     * get locale
+     * 
+     * @return string|null
+     */
+    public function locale(): string|null;
+
+    /**
+     * set locale
+     * 
+     * @param string $locale
+     * @return static
+     */
+    public function setLocale(string $locale): static;
+
+    /*----------------------------------------*
+     * Queue
+     *----------------------------------------*/
+
+    /**
+     * register mail queue
+     * if $delay is null, delay mail queue
+     * 
+     * @param \DateTimeInterface|\DateInterval|int|null $delay
+     * @return void
+     */
+    public function queue(\DateTimeInterface|\DateInterval|int|null $delay = null): void;
+
+    /**
+     * whether to send the mail after the transaction is committed
+     * 
+     * @return bool
+     */
+    public function afterCommit(): bool;
+
+    /**
+     * set whether to send the mail after the transaction is committed
+     * 
+     * @param bool $queueAfterCommit
+     * @return static
+     */
+    public function isAfterCommit(bool $queueAfterCommit = true): static;
+
+    /**
+     * get mail queue connection
+     * 
+     * @return string|null
+     */
+    public function queueConnection(): string|null;
+
+    /**
+     * set mail queue connection
+     * 
+     * @param string $queueConnection
+     * @return static
+     */
+    public function onConnection(string $queueConnection): static;
+
+    /**
+     * get mail queue name
+     * 
+     * @return string|null
+     */
+    public function queueName(): string|null;
+
+    /**
+     * set mail queue name
+     * 
+     * @param string $queueName
+     * @return static
+     */
+    public function onQueue(string $queueName): static;
 }
