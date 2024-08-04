@@ -541,14 +541,14 @@ interface MailClientInterface
     public function queue(\DateTimeInterface|\DateInterval|int|null $delay = null): void;
 
     /**
-     * whether to send the mail after the transaction is committed
+     * whether to send mail after transaction is committed
      * 
      * @return bool
      */
     public function afterCommit(): bool;
 
     /**
-     * set whether to send the mail after the transaction is committed
+     * set whether to send mail after transaction is committed
      * 
      * @param bool $queueAfterCommit
      * @return static

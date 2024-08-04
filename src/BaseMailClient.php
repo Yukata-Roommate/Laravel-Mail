@@ -1055,7 +1055,7 @@ abstract class BaseMailClient implements MailClientInterface
     protected string|null $queueName = null;
 
     /**
-     * whether to send the mail after the transaction is committed
+     * whether to send mail after transaction is committed
      * 
      * @var bool
      */
@@ -1098,7 +1098,7 @@ abstract class BaseMailClient implements MailClientInterface
     }
 
     /**
-     * whether to send the mail after the transaction is committed
+     * whether to send mail after transaction is committed
      * 
      * @return bool
      */
@@ -1108,7 +1108,7 @@ abstract class BaseMailClient implements MailClientInterface
     }
 
     /**
-     * set whether to send the mail after the transaction is committed
+     * set whether to send mail after transaction is committed
      * 
      * @param bool $queueAfterCommit
      * @return static

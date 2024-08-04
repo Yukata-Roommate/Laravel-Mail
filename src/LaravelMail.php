@@ -56,7 +56,7 @@ class LaravelMail extends Mailable
      * @param array<int, \Illuminate\Mail\Mailables\Attachment> $attachments
      * @param \Illuminate\Mail\Mailables\Headers $headers
      */
-    function __construct(
+    public function __construct(
         Envelope $envelope,
         Content $content,
         array $attachments,
